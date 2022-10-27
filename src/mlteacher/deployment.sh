@@ -1,0 +1,2 @@
+az ml online-endpoint create --name mlpatterns-endpoint -f serving-endpoint.yaml -g csu-nl-intelligence -w mlpatterns
+az ml online-deployment create --name tfwithjax --endpoint mlpatterns-endpoint -f serving-deployment.yaml --all-traffic -g csu-nl-intelligence -w mlpatterns

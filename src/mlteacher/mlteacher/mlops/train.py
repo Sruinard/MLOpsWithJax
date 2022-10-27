@@ -208,9 +208,9 @@ def train_and_evaluate(workdir: str = ".") -> train_state.TrainState:
         model=model,
         params=state.params,
         ctable=ctable,
-        serving_dir=serving_dir
-    )
-    return state, model_serving_path 
+        serving_dir=serving_dir,
+        model_name=config.TrainConfig.model_name)
+    return state, model_serving_path
 
 
 def main(_):

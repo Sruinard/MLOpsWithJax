@@ -1,14 +1,15 @@
 # create a FastAPI application
-import time
+import os
+import pathlib
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from mlteacher import config
+
+import config
+
 from mlteacher.mlops import train
-import os
-from azure.storage.queue import QueueClient, TextBase64EncodePolicy
-import json
-import base64
+from mlteacher.submit_training import AzureMLRepo
 
 app = FastAPI()
 
@@ -34,42 +35,41 @@ app.add_middleware(
 def homepage():
     return {"message": "Hello World"}
 
-@app.get("/jobs")
-def train_model():
-    queue_client = QueueClient.from_connection_string(config.TrainConfig.fileshare_connection_string, "modeltrainingqueue", message_encode_policy=TextBase64EncodePolicy())
-    queue_client.send_message(
-        json.dumps({
-            "model": "digits"
-        })
-    )
-    return "Added model training job"
 
-@app.post("/models")
-def train_model():
-    n_min = 5
-    
-    time.sleep(n_min * 60)
-    return "model training done"
+@app.get("/config")
+def homepage():
+    return {"cpath": cpath}
 
-# @app.get("/models")
-def test_can_upload_file():
-    from azure.storage.fileshare import ShareFileClient
 
-    _, model_serving_path = train.train_and_evaluate()
+@app.get("/azureml/environments")
+def get_environments():
+    docker_build_context = pathlib.Path().parent.resolve()
+    repo = AzureMLRepo()
+    env_versions = repo.register_environment(docker_build_context)
+    return env_versions
 
-    # upload all files from a saved model to fileshare
 
-    for root, _, filename in os.walk(model_serving_path):
-        if filename:
-            local_filepath = os.path.join(root, filename)
-            # same as local_filepath but added for readability and to remove ambiguity
-            fs_filepath = os.path.join(root, filename)
-            file_client = ShareFileClient.from_connection_string(conn_str=config.TrainConfig.fileshare_connection_string, share_name=config.TrainConfig.fileshare_name, file_path=fs_filepath)
-            with open(local_filepath, "rb") as source_file:
-                file_client.upload_file(source_file)
+@app.get("/azureml/compute")
+def get_compute():
+    repo = AzureMLRepo()
+    repo.create_compute()
+
+
+@app.get("/azureml/training")
+def get_training():
+    repo = AzureMLRepo()
+    src_code_root_folder = pathlib.Path().parent.resolve()
+    training_info = repo.submit_training_job(
+        path_to_src_code=src_code_root_folder)
+    return training_info
+
+
+@app.get("/azureml/models/{job_name}")
+def add_model(job_name: str):
+    repo = AzureMLRepo()
+    repo.register_model_from_job_name(job_name)
 
 
 if __name__ == "__main__":
     # run uvicorn on port environment variable PORT or 8000
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
-    # test_can_upload_file()

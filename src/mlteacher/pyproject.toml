@@ -3,7 +3,6 @@ name = "mlteacher"
 version = "0.1.0"
 description = ""
 authors = ["Sruinard <41334908+Sruinard@users.noreply.github.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.8"
@@ -18,10 +17,11 @@ clu = "^0.0.7"
 python-dotenv = "^0.21.0"
 azure-storage-file-share = "^12.9.0"
 azure-storage-queue = "^12.4.0"
+azure-ai-ml = "^1.0.0"
+azure-identity = "^1.11.0"
+dm-sonnet = "^2.0.0"
+mldesigner = "^0.1.0b8"
 
-
-[tool.poetry.group.dev.dependencies]
-pylint = "^2.15.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,0 +1,26 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: tfserving-deployment-jax
+endpoint_name: mlpatterns-endpoint
+model:
+  name: brain
+  version: 1
+  path: ./models/brain
+environment_variables:
+  MODEL_BASE_PATH: /var/azureml-app/azureml-models/brain/1
+  MODEL_NAME: brain
+environment:
+  name: tfserving2
+  version: 1
+  image: docker.io/tensorflow/serving:latest
+  inference_config:
+    liveness_route:
+      port: 8501
+      path: /v1/models/brain
+    readiness_route:
+      port: 8501
+      path: /v1/models/brain
+    scoring_route:
+      port: 8501
+      path: /v1/models/brain:predict
+instance_type: Standard_DS2_v2
+instance_count: 1
