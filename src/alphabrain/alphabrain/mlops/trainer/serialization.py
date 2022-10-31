@@ -12,7 +12,7 @@ import flax.optim
 import jax
 from jax import numpy as jnp
 from jax.experimental import jax2tf
-from mlteacher.mlops.transform import CharacterTable
+from alphabrain.mlops.transform import CharacterTable
 import numpy as np
 
 from datetime import datetime
@@ -102,6 +102,6 @@ def save_model(model, params, ctable, serving_dir, model_name):
     latest_model_subpath = datetime.now().strftime("%Y%m%d%H%M%S")
     tf_model = _SavedModelWrapper(tf_graph, param_vars)
     model_serving_path = os.path.join(
-        "outputs/artifacts", serving_dir, model_name, latest_model_subpath)
+        serving_dir, model_name, latest_model_subpath)
     tf.saved_model.save(tf_model, model_serving_path, signatures=signatures)
     return model_serving_path

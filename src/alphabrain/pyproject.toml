@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mlteacher"
+name = "alphabrain"
 version = "0.1.0"
 description = ""
 authors = ["Sruinard <41334908+Sruinard@users.noreply.github.com>"]

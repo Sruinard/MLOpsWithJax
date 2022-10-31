@@ -30,9 +30,9 @@ import jax
 import jax.numpy as jnp
 import optax
 import os
-from mlteacher import config
+from alphabrain import config
 
-from mlteacher.mlops import transform, models, serving
+from alphabrain.mlops import transform, models, serving
 
 
 Array = Any
@@ -179,10 +179,10 @@ def decode_batch(state: train_state.TrainState, batch: Dict[str, Array],
         log_decode(question, inferred, golden)
 
 
-def train_and_evaluate(workdir: str = ".") -> train_state.TrainState:
+def train_and_evaluate(serving_model_dir: str, logs_dir: str) -> train_state.TrainState:
     """Trains for a fixed number of steps and decode during training."""
-    logs_dir = os.path.join(workdir, "logs")
-    serving_dir = os.path.join(workdir, "models")
+    # logs_dir = os.path.join(workdir, "logs")
+    # serving_dir = os.path.join(workdir, "models")
 
     # TODO(marcvanzee): Integrate ctable with train_state.
     ctable = transform.CharacterTable(
@@ -208,7 +208,7 @@ def train_and_evaluate(workdir: str = ".") -> train_state.TrainState:
         model=model,
         params=state.params,
         ctable=ctable,
-        serving_dir=serving_dir,
+        serving_dir=serving_model_dir,
         model_name=config.TrainConfig.model_name)
     return state, model_serving_path
 

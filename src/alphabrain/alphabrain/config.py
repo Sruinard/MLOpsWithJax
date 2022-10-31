@@ -23,11 +23,17 @@ class TrainConfig:
     model_name = os.environ.get("MODEL_NAME", "brain")
 
 
+class InfraConfig:
+    custom_env_name: os.environ.get("CUSTOM_ENV_NAME", "brain-jax-env")
+    compute_cluster: os.environ.get("compute_cluster", "cpu-cluster")
+
+
 class DeploymentConfig:
     online_endpoint_name: str
 
 
 class PipelineConfig:
-    deployment_config: DeploymentConfig
+    infra_config: InfraConfig
     train_config: TrainConfig
+    deployment_config: DeploymentConfig
     azure_ml_config: AzureMLConfig

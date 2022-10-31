@@ -8,8 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import config
 
-from mlteacher.mlops import train
-from mlteacher.submit_training import AzureMLRepo
+from alphabrain.mlops import train
+from alphabrain.alphabrain.mlops.trainer.azure_ml_repo import AzureMLRepo
 
 app = FastAPI()
 
@@ -34,11 +34,6 @@ app.add_middleware(
 @app.get("/")
 def homepage():
     return {"message": "Hello World"}
-
-
-@app.get("/config")
-def homepage():
-    return {"cpath": cpath}
 
 
 @app.get("/azureml/environments")

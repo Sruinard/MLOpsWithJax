@@ -6,7 +6,7 @@ from azure.ai.ml.entities import Model
 from azure.ai.ml.entities import Environment, BuildContext, ManagedOnlineDeployment
 from azure.ai.ml import command
 import os
-from mlteacher.config import PipelineConfig, AzureMLConfig
+from alphabrain.config import PipelineConfig, AzureMLConfig
 
 
 class AzureMLRepo:
@@ -58,7 +58,7 @@ class AzureMLRepo:
             "name": returned_job.name
         }
 
-    def online_endpoint_deployment(self):
+    def online_endpoint_deployment(self, model_name):
         # create a blue deployment
         model = Model(name=PipelineConfig.train_config.model_name, version="1")
 
@@ -66,9 +66,9 @@ class AzureMLRepo:
             name="tfserving-environment",
             image="docker.io/tensorflow/serving:latest",
             inference_config={
-                "liveness_route": {"port": 8501, "path": f"/v1/models/{PipelineConfig.train_config.model_name}"},
-                "readiness_route": {"port": 8501, "path": f"/v1/models/{PipelineConfig.train_config.model_name}"},
-                "scoring_route": {"port": 8501, "path": f"/v1/models/{PipelineConfig.train_config.model_name}:predict"},
+                "liveness_route": {"port": 8501, "path": f"/v1/models/{model_name}"},
+                "readiness_route": {"port": 8501, "path": f"/v1/models/{model_name}"},
+                "scoring_route": {"port": 8501, "path": f"/v1/models/{model_name}:predict"},
             },
         )
 
@@ -78,8 +78,8 @@ class AzureMLRepo:
             model=model,
             environment=env,
             environment_variables={
-                "MODEL_BASE_PATH": f"/var/azureml-app/azureml-models/{PipelineConfig.train_config.model_name}/1",
-                "MODEL_NAME": PipelineConfig.train_config.model_name,
+                "MODEL_BASE_PATH": f"/var/azureml-app/azureml-models/{model_name}/1",
+                "MODEL_NAME": model_name,
             },
             instance_type="Standard_DS2_v2",
             instance_count=1,
@@ -113,3 +113,10 @@ class AzureMLRepo:
             type="custom_model"
         )
         return run_model
+
+    def submit_pipeline_job(self, pipeline_definition):
+        pipeline_instance = pipeline_definition()
+
+        pipeline_job = self.ml_client.jobs.create_or_update(
+            pipeline_instance, experiment_name="pipeline_samples"
+        )
