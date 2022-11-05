@@ -32,7 +32,7 @@ import optax
 import os
 from alphabrain import config
 
-from alphabrain.mlops import transform, models, serving
+from alphabrain.mlops.trainer import transform, models, serialization
 
 
 Array = Any
@@ -204,7 +204,7 @@ def train_and_evaluate(serving_model_dir: str, logs_dir: str) -> train_state.Tra
             decode_batch(state, batch, rng, ctable)
 
     # save final model to workdir
-    model_serving_path = serving.save_model(
+    model_serving_path = serialization.save_model(
         model=model,
         params=state.params,
         ctable=ctable,

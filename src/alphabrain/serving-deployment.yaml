@@ -2,16 +2,20 @@ $schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.sch
 name: tfserving-deployment-jax
 endpoint_name: mlpatterns-endpoint
 model:
-  name: brain
+  name: alphabrain
   version: 1
-  path: ./models/brain
+  path: ./serving_model_dir/brain
 environment_variables:
-  MODEL_BASE_PATH: /var/azureml-app/azureml-models/brain/1
+  MODEL_BASE_PATH: /var/azureml-app/azureml-models/alphabrain/1
   MODEL_NAME: brain
 environment:
-  name: tfserving2
+  name: tfservingjaxpythoncustom
   version: 1
-  image: docker.io/tensorflow/serving:latest
+  # image: docker.io/tensorflow/serving:latest
+  # image: c098ac448a7648f88ddf2499bdf061f1.azurecr.io/azureml/azureml_8f50c2dddb835ebfc618effb01f1f375
+  image: c098ac448a7648f88ddf2499bdf061f1.azurecr.io/customtfserving2
+  # build:
+  #   path: /workspaces/MLOpsWithJax/src/alphabrain/alphabrain/mlops/
   inference_config:
     liveness_route:
       port: 8501

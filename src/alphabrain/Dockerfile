@@ -1,6 +1,6 @@
 FROM python:3.8.14-bullseye
 
-WORKDIR /mlteacher
+WORKDIR /alphabrain
 ENV POETRY_HOME=/etc/poetry
 
 
@@ -19,7 +19,7 @@ RUN poetry config virtualenvs.create false \
     && poetry run pip install -r requirements_from_export.txt 
 
 
-COPY mlteacher mlteacher
+COPY alphabrain alphabrain
 RUN poetry install --no-interaction
 
-CMD ["python3", "mlteacher/app.py"]
+# CMD ["python3", "alphabrain/app.py"]

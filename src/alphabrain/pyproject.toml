@@ -15,12 +15,11 @@ jaxlib = "0.3.15"
 flax = "0.5.0"
 clu = "^0.0.7"
 python-dotenv = "^0.21.0"
-azure-storage-file-share = "^12.9.0"
-azure-storage-queue = "^12.4.0"
 azure-ai-ml = "^1.0.0"
 azure-identity = "^1.11.0"
-dm-sonnet = "^2.0.0"
 mldesigner = "^0.1.0b8"
+strawberry-graphql = {extras = ["fastapi"], version = "^0.137.1"}
+docker = "^6.0.0"
 
 
 [build-system]

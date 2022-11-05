@@ -179,29 +179,16 @@ msrest = ">=0.7.1"
 
 [[package]]
 name = "azure-storage-file-share"
-version = "12.9.0"
+version = "12.10.1"
 description = "Microsoft Azure Azure File Share Storage Client Library for Python"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
-azure-core = ">=1.23.1,<2.0.0"
+azure-core = ">=1.24.2,<2.0.0"
 cryptography = ">=2.1.4"
-msrest = ">=0.6.21"
-
-[[package]]
-name = "azure-storage-queue"
-version = "12.4.0"
-description = "Microsoft Azure Azure Queue Storage Client Library for Python"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-azure-core = ">=1.23.1,<2.0.0"
-cryptography = ">=2.1.4"
-msrest = ">=0.6.21"
+msrest = ">=0.7.1"
 
 [[package]]
 name = "backcall"
@@ -398,32 +385,30 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, 
 graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
-name = "dm-sonnet"
-version = "2.0.0"
-description = "Sonnet is a library for building neural networks in TensorFlow."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-absl-py = ">=0.7.1"
-dm-tree = ">=0.1.1"
-numpy = ">=1.16.3"
-six = ">=1.12.0"
-tabulate = ">=0.7.5"
-wrapt = ">=1.11.1"
-
-[package.extras]
-tensorflow = ["tensorflow (>=2)"]
-tensorflow_with_gpu = ["tensorflow-gpu (>=2)"]
-
-[[package]]
 name = "dm-tree"
 version = "0.1.7"
 description = "Tree is a library for working with nested data structures."
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "docker"
+version = "6.0.0"
+description = "A Python library for the Docker Engine API."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+packaging = ">=14.0"
+pywin32 = {version = ">=304", markers = "sys_platform == \"win32\""}
+requests = ">=2.26.0"
+urllib3 = ">=1.26.0"
+websocket-client = ">=0.32.0"
+
+[package.extras]
+ssh = ["paramiko (>=2.4.3)"]
 
 [[package]]
 name = "entrypoints"
@@ -607,6 +592,14 @@ protobuf = ">=3.15.0,<5.0.0dev"
 
 [package.extras]
 grpc = ["grpcio (>=1.0.0,<2.0.0dev)"]
+
+[[package]]
+name = "graphql-core"
+version = "3.2.3"
+description = "GraphQL implementation for Python, a port of GraphQL.js, the JavaScript reference implementation for GraphQL."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4"
 
 [[package]]
 name = "grpcio"
@@ -1386,6 +1379,17 @@ python-versions = ">=3.7"
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-multipart"
+version = "0.0.5"
+description = "A streaming multipart parser for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.4.0"
+
+[[package]]
 name = "pywin32"
 version = "304"
 description = "Python for Window Extensions"
@@ -1547,6 +1551,35 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
 
 [[package]]
+name = "strawberry-graphql"
+version = "0.137.1"
+description = "A library for creating GraphQL APIs"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+fastapi = {version = ">=0.65.2", optional = true, markers = "extra == \"fastapi\""}
+graphql-core = ">=3.2.0,<3.3.0"
+python-dateutil = ">=2.7.0,<3.0.0"
+python-multipart = {version = ">=0.0.5,<0.0.6", optional = true, markers = "extra == \"asgi\" or extra == \"debug-server\" or extra == \"fastapi\""}
+typing_extensions = ">=3.7.4,<5.0.0"
+
+[package.extras]
+aiohttp = ["aiohttp (>=3.7.4.post0,<4.0.0)"]
+asgi = ["python-multipart (>=0.0.5,<0.0.6)", "starlette (>=0.13.6)"]
+chalice = ["chalice (>=1.22,<2.0)"]
+channels = ["asgiref (>=3.2,<4.0)", "channels (>=3.0.5)"]
+cli = ["click (>=7.0,<9.0)", "pygments (>=2.3,<3.0)"]
+debug-server = ["click (>=7.0,<9.0)", "pygments (>=2.3,<3.0)", "python-multipart (>=0.0.5,<0.0.6)", "starlette (>=0.13.6)", "uvicorn (>=0.11.6,<0.20.0)"]
+django = ["Django (>=3.2)", "asgiref (>=3.2,<4.0)"]
+fastapi = ["fastapi (>=0.65.2)", "python-multipart (>=0.0.5,<0.0.6)"]
+flask = ["flask (>=1.1)"]
+opentelemetry = ["opentelemetry-api (<2)", "opentelemetry-sdk (<2)"]
+pydantic = ["pydantic (<2)"]
+sanic = ["sanic (>=20.12.2,<22.0.0)"]
+
+[[package]]
 name = "strictyaml"
 version = "1.6.1"
 description = "Strict, typed YAML parser"
@@ -1556,17 +1589,6 @@ python-versions = "*"
 
 [package.dependencies]
 python-dateutil = ">=2.6.0"
-
-[[package]]
-name = "tabulate"
-version = "0.9.0"
-description = "Pretty-print tabular data"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.extras]
-widechars = ["wcwidth"]
 
 [[package]]
 name = "tensorboard"
@@ -1855,6 +1877,19 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "websocket-client"
+version = "1.4.1"
+description = "WebSocket client for Python with low level API options"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+docs = ["Sphinx (>=3.4)", "sphinx-rtd-theme (>=0.5)"]
+optional = ["python-socks", "wsaccel"]
+test = ["websockets"]
+
+[[package]]
 name = "Werkzeug"
 version = "2.2.2"
 description = "The comprehensive WSGI web application library."
@@ -1902,7 +1937,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.8"
-content-hash = "93f01ab052e74cac735a77b2c35cb355c29944def079914bf42705262b9bead1"
+content-hash = "b6a2b7c8ae0f83d7e947428a829bc2eb01a16a1e78705ce3f5bc33b2c000903b"
 
 [metadata.files]
 absl-py = [
@@ -1958,12 +1993,8 @@ azure-storage-file-datalake = [
     {file = "azure_storage_file_datalake-12.9.0-py3-none-any.whl", hash = "sha256:479874412361647312b89622a4612c907fb9dde4320da75bd769267b4e9f8e95"},
 ]
 azure-storage-file-share = [
-    {file = "azure-storage-file-share-12.9.0.zip", hash = "sha256:7daa3044fe07d7f7504cb9a15f99a17acb28c808ed83341678bf2df9315f5c22"},
-    {file = "azure_storage_file_share-12.9.0-py3-none-any.whl", hash = "sha256:071bcd08f018c1de58986b4d5d908f26994d7acc42eecb3cf808049577ca0608"},
-]
-azure-storage-queue = [
-    {file = "azure-storage-queue-12.4.0.zip", hash = "sha256:d633050e5beac6c43e86f7d1cbe74766a1798b9f6e1b44ae41c0490465d00b45"},
-    {file = "azure_storage_queue-12.4.0-py3-none-any.whl", hash = "sha256:9bd68fc07f56c43cea8f3cd1b4a8ea10807fde25f075736725e708945ec39697"},
+    {file = "azure-storage-file-share-12.10.1.zip", hash = "sha256:5679bbd9c760ffd3fe27749c9e3e63706ea42c274854c1a7c6753d6a7da8c464"},
+    {file = "azure_storage_file_share-12.10.1-py3-none-any.whl", hash = "sha256:8dbe5dc6252310c891e9564a46d282db3df3d96101a5b9bbab23f265b7c33625"},
 ]
 backcall = [
     {file = "backcall-0.2.0-py2.py3-none-any.whl", hash = "sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255"},
@@ -2202,10 +2233,6 @@ dill = [
     {file = "dill-0.3.5.1-py2.py3-none-any.whl", hash = "sha256:33501d03270bbe410c72639b350e941882a8b0fd55357580fbc873fba0c59302"},
     {file = "dill-0.3.5.1.tar.gz", hash = "sha256:d75e41f3eff1eee599d738e76ba8f4ad98ea229db8b085318aa2b3333a208c86"},
 ]
-dm-sonnet = [
-    {file = "dm-sonnet-2.0.0.tar.gz", hash = "sha256:065c05b0bc40b82a7136017f17af479ca285f9de2a19746b340ad2d717f6a9c4"},
-    {file = "dm_sonnet-2.0.0-py3-none-any.whl", hash = "sha256:773964935060a8caae80026baec2cdd6f69c9ba2102fa6abf245cd721a914b10"},
-]
 dm-tree = [
     {file = "dm-tree-0.1.7.tar.gz", hash = "sha256:30fec8aca5b92823c0e796a2f33b875b4dccd470b57e91e6c542405c5f77fd2a"},
     {file = "dm_tree-0.1.7-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3fae437135b6cbbdd51e96488a35e78c3617defa0b65265e7e8752d506f933fd"},
@@ -2229,6 +2256,10 @@ dm-tree = [
     {file = "dm_tree-0.1.7-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:7fa0740b7fbae2c3a43a3114a514891b5d6c383050828f36aa1816cf40f73a6a"},
     {file = "dm_tree-0.1.7-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:1379a02df36e2bbff9819ceafa55ccd436b15af398803f781f372f8ead7ed871"},
     {file = "dm_tree-0.1.7-cp39-cp39-win_amd64.whl", hash = "sha256:3ca0a58e219b7b0bc201fea4679971188d0a9028a2543c16803a84e8f8c7eb2c"},
+]
+docker = [
+    {file = "docker-6.0.0-py3-none-any.whl", hash = "sha256:6e06ee8eca46cd88733df09b6b80c24a1a556bc5cb1e1ae54b2c239886d245cf"},
+    {file = "docker-6.0.0.tar.gz", hash = "sha256:19e330470af40167d293b0352578c1fa22d74b34d3edf5d4ff90ebc203bbb2f1"},
 ]
 entrypoints = [
     {file = "entrypoints-0.4-py3-none-any.whl", hash = "sha256:f174b5ff827504fd3cd97cc3f8649f3693f51538c7e4bdf3ef002c8429d42f9f"},
@@ -2278,6 +2309,10 @@ google-pasta = [
 googleapis-common-protos = [
     {file = "googleapis-common-protos-1.56.4.tar.gz", hash = "sha256:c25873c47279387cfdcbdafa36149887901d36202cb645a0e4f29686bf6e4417"},
     {file = "googleapis_common_protos-1.56.4-py2.py3-none-any.whl", hash = "sha256:8eb2cbc91b69feaf23e32452a7ae60e791e09967d81d4fcc7fc388182d1bd394"},
+]
+graphql-core = [
+    {file = "graphql-core-3.2.3.tar.gz", hash = "sha256:06d2aad0ac723e35b1cb47885d3e5c45e956a53bc1b209a9fc5369007fe46676"},
+    {file = "graphql_core-3.2.3-py3-none-any.whl", hash = "sha256:5766780452bd5ec8ba133f8bf287dc92713e3868ddd83aee4faab9fc3e303dc3"},
 ]
 grpcio = [
     {file = "grpcio-1.49.1-cp310-cp310-linux_armv7l.whl", hash = "sha256:fd86040232e805b8e6378b2348c928490ee595b058ce9aaa27ed8e4b0f172b20"},
@@ -2970,6 +3005,9 @@ python-dotenv = [
     {file = "python-dotenv-0.21.0.tar.gz", hash = "sha256:b77d08274639e3d34145dfa6c7008e66df0f04b7be7a75fd0d5292c191d79045"},
     {file = "python_dotenv-0.21.0-py3-none-any.whl", hash = "sha256:1684eb44636dd462b66c3ee016599815514527ad99965de77f43e0944634a7e5"},
 ]
+python-multipart = [
+    {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
+]
 pywin32 = [
     {file = "pywin32-304-cp310-cp310-win32.whl", hash = "sha256:3c7bacf5e24298c86314f03fa20e16558a4e4138fc34615d7de4070c23e65af3"},
     {file = "pywin32-304-cp310-cp310-win_amd64.whl", hash = "sha256:4f32145913a2447736dad62495199a8e280a77a0ca662daa2332acf849f0be48"},
@@ -3165,12 +3203,12 @@ starlette = [
     {file = "starlette-0.20.4-py3-none-any.whl", hash = "sha256:c0414d5a56297d37f3db96a84034d61ce29889b9eaccf65eb98a0b39441fcaa3"},
     {file = "starlette-0.20.4.tar.gz", hash = "sha256:42fcf3122f998fefce3e2c5ad7e5edbf0f02cf685d646a83a08d404726af5084"},
 ]
+strawberry-graphql = [
+    {file = "strawberry_graphql-0.137.1-py3-none-any.whl", hash = "sha256:b6ba148a71752218dc2d19d686a45fb650676b9d90f1331802542ef9e5d79ae2"},
+    {file = "strawberry_graphql-0.137.1.tar.gz", hash = "sha256:4b36ef85654d70c22208d99577b287d805bbd9626d93906aa9021967c3d502a9"},
+]
 strictyaml = [
     {file = "strictyaml-1.6.1.tar.gz", hash = "sha256:688be16ee5d1a2f94aa4abdc6d881e8e254d173d724ac88725955fe66bdb63d4"},
-]
-tabulate = [
-    {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
-    {file = "tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c"},
 ]
 tensorboard = [
     {file = "tensorboard-2.9.0-py3-none-any.whl", hash = "sha256:bd78211076dca5efa27260afacfaa96cd05c7db12a6c09cc76a1d6b2987ca621"},
@@ -3281,6 +3319,10 @@ uvicorn = [
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
+]
+websocket-client = [
+    {file = "websocket-client-1.4.1.tar.gz", hash = "sha256:f9611eb65c8241a67fb373bef040b3cf8ad377a9f6546a12b620b6511e8ea9ef"},
+    {file = "websocket_client-1.4.1-py3-none-any.whl", hash = "sha256:398909eb7e261f44b8f4bd474785b6ec5f5b499d4953342fe9755e01ef624090"},
 ]
 Werkzeug = [
     {file = "Werkzeug-2.2.2-py3-none-any.whl", hash = "sha256:f979ab81f58d7318e064e99c4506445d60135ac5cd2e177a2de0089bfd4c9bd5"},

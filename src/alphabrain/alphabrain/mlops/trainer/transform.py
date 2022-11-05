@@ -7,6 +7,7 @@ import random
 
 Array = Any
 
+
 class CharacterTable:
 
     def __init__(self, chars, max_len_query_digit: int = 3) -> None:
@@ -59,7 +60,6 @@ class CharacterTable:
     def encode(self, string_input):
         return np.array([self._char_indices[char] for char in string_input] + [self.eos_id])
 
-
     def encode_one_hot(self, batch_inputs: str) -> np.ndarray:
         # query --> tokens --> padded tokens
         def encode_str(string_input):
@@ -68,7 +68,8 @@ class CharacterTable:
             tokens_with_padding = np.pad(tokens, [(0, n_tokens_to_pad)])
             assert tokens_with_padding.shape == (self.max_input_len, )
             one_hot_encoded_tokens = self.one_hot(tokens_with_padding)
-            assert one_hot_encoded_tokens.shape == (self.max_input_len, self.vocab_size)
+            assert one_hot_encoded_tokens.shape == (
+                self.max_input_len, self.vocab_size)
             return one_hot_encoded_tokens
         return np.array([encode_str(inp) for inp in batch_inputs])
 
@@ -104,7 +105,7 @@ class CharacterTable:
 
     def decode_onehot(self, batch_inputs: Array) -> np.ndarray:
         """Decodes a batch of one-hot encoding to strings."""
-        decode_inputs = lambda inputs: self.decode(inputs.argmax(axis=-1))
+        def decode_inputs(inputs): return self.decode(inputs.argmax(axis=-1))
         return np.array(list(map(decode_inputs, batch_inputs)))
 
     @property
@@ -117,18 +118,22 @@ class CharacterTable:
 
 
 def mask_sequences(sequence_batch: Array, lengths: Array) -> Array:
-  """Sets positions beyond the length of each sequence to 0."""
-  return sequence_batch * (
-      lengths[:, np.newaxis] > np.arange(sequence_batch.shape[1])[np.newaxis])
+    """Sets positions beyond the length of each sequence to 0."""
+    return sequence_batch * (
+        lengths[:, np.newaxis] > np.arange(sequence_batch.shape[1])[np.newaxis])
+
 
 def get_sequence_lengths(sequence_batch: jnp.ndarray, eos_id: int) -> Array:
     # as we are dealing with a one hot encoded variable and we now the eos_id, we can select the column
     # representing the eos_id and find it's argmax. Because if we find it's argmax
     # we know everything after that index will be padded.
     eos_row = sequence_batch[:, :, eos_id]
-    eos_idx = jnp.argmax(eos_row, axis=-1) # get the first occurence when we get the end of sentence id
+    # get the first occurence when we get the end of sentence id
+    eos_idx = jnp.argmax(eos_row, axis=-1)
     return jnp.where(
         eos_row[jnp.arange(eos_row.shape[0]), eos_idx],
-        eos_idx + 1, # the +1 makes sure we include the eos token, which will also be needed during inference to know when to stop generating.
-        sequence_batch.shape[1] # if no eos id is present, use the entire sequence as target
+        # the +1 makes sure we include the eos token, which will also be needed during inference to know when to stop generating.
+        eos_idx + 1,
+        # if no eos id is present, use the entire sequence as target
+        sequence_batch.shape[1]
     )

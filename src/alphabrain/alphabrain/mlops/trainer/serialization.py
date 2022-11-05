@@ -12,7 +12,7 @@ import flax.optim
 import jax
 from jax import numpy as jnp
 from jax.experimental import jax2tf
-from alphabrain.mlops.transform import CharacterTable
+from alphabrain.mlops.trainer.transform import CharacterTable
 import numpy as np
 
 from datetime import datetime

@@ -7,112 +7,59 @@ from azure.ai.ml.entities import Environment, BuildContext, ManagedOnlineDeploym
 from azure.ai.ml import command
 import os
 from alphabrain.config import PipelineConfig, AzureMLConfig
+from datetime import datetime
 
 
 class AzureMLRepo:
 
     def __init__(self, azure_ml_config: AzureMLConfig = AzureMLConfig()):
-        self.cpu_compute_target = "cpu-cluster"
         self.ml_client = MLClient(DefaultAzureCredential(), azure_ml_config.subscription_id,
                                   azure_ml_config.resource_group_name, azure_ml_config.workspace_name)
 
-    def create_compute(self):
-        try:
-            self.ml_client.compute.get(self.cpu_compute_target)
-        except Exception:
-            print("Creating a new cpu compute target...")
-            compute = AmlCompute(
-                name=self.cpu_compute_target, size="STANDARD_D2_V2", min_instances=0, max_instances=4
-            )
-            self.ml_client.compute.begin_create_or_update(compute).result()
-
-    def register_environment(self, root_dir):
-        env_name = "mlteacher-jax-env"
-        env_docker_context = Environment(
-            build=BuildContext(path=root_dir),
-            name=env_name,
-            description="Environment created from a Docker context.",
+    def register_model(self, path_to_model_on_storage_account, model_artifact_name='alphabrain'):
+        model_version = str(datetime.now().strftime("%Y%m%d%H%M%S"))
+        # atastores/workspaceblobstore/paths/azureml/8b611fb8-afe0-4464-b6a7-eba88541e8b6/serving_model_dir/brain/
+        # azureml://subscriptions/0abb6ec5-9030-4b3f-af04-09183c688576/resourcegroups/csu-nl-intelligence/workspaces/mlpatterns/datastores/workspaceblobstore/paths/azureml/8b611fb8-afe0-4464-b6a7-eba88541e8b6/serving_model_dir/brain/20221101080400/
+        model = Model(
+            path=path_to_model_on_storage_account,
+            name=model_artifact_name,
+            version=model_version,
+            type="custom_model",
+            description="Model created from pipeline run."
         )
-        self.ml_client.environments.create_or_update(env_docker_context)
-        envs = self.ml_client.environments.list(name=env_name)
-        return {
-            "environment_versions": [env.version for env in envs],
-            "environment_name": env_name
-        }
+        self.ml_client.models.create_or_update(model)
+        return model_artifact_name, model_version
 
-    def submit_training_job(self, path_to_src_code: str):
-        # define the command
-        env_name = "mlteacher-jax-env"
-        envs = self.ml_client.environments.list(name=env_name)
-        command_job = command(
-            code=path_to_src_code,
-            command="python mlteacher/mlops/train.py",
-            environment=f"{env_name}:{next(envs).version}",
-            compute=self.cpu_compute_target,
-        )
-        # submit the command
-        returned_job = self.ml_client.jobs.create_or_update(command_job)
-        # get a URL for the status of the job
-        return {
-            "endpoint": returned_job.services["Studio"].endpoint,
-            "name": returned_job.name
-        }
+    def online_endpoint_deployment(self, model_artifact_name, model_artifact_version, tf_model_name):
+        serving_env = self.ml_client.environments.get(
+            name=PipelineConfig.deployment_config.serving_environment_name, version='1')
 
-    def online_endpoint_deployment(self, model_name):
-        # create a blue deployment
-        model = Model(name=PipelineConfig.train_config.model_name, version="1")
+        # model_artifact_version = next(
+        #     self.ml_client.models.list(name=model_artifact_name)).version
+        model = self.ml_client.models.get(
+            name=model_artifact_name, version=model_artifact_version)
 
-        env = Environment(
-            name="tfserving-environment",
-            image="docker.io/tensorflow/serving:latest",
-            inference_config={
-                "liveness_route": {"port": 8501, "path": f"/v1/models/{model_name}"},
-                "readiness_route": {"port": 8501, "path": f"/v1/models/{model_name}"},
-                "scoring_route": {"port": 8501, "path": f"/v1/models/{model_name}:predict"},
-            },
-        )
-
+        deployment_name = f'brain-deployment-{model_artifact_version}'
         blue_deployment = ManagedOnlineDeployment(
-            name="blue",
+            name=deployment_name,
             endpoint_name=PipelineConfig.deployment_config.online_endpoint_name,
             model=model,
-            environment=env,
+            environment=serving_env,
             environment_variables={
-                "MODEL_BASE_PATH": f"/var/azureml-app/azureml-models/{model_name}/1",
-                "MODEL_NAME": model_name,
+                "MODEL_BASE_PATH": f"/var/azureml-app/azureml-models/{model_artifact_name}/{model_artifact_version}",
+                "MODEL_NAME": tf_model_name,
             },
             instance_type="Standard_DS2_v2",
             instance_count=1,
-        )
-        self.ml_client.begin_create_or_update(blue_deployment)
 
-    def register_model(self, job_name=None, local_path=None, model_name="brain"):
-        if job_name is not None:
-            model_to_register = self._get_model_from_job_name(
-                job_name=job_name, model_name=model_name)
-        if local_path is not None:
-            model_to_register = self._get_model_from_local(
-                local_path=local_path, model_name=model_name)
-        self.ml_client.models.create_or_update(model_to_register)
-
-    def _get_model_from_local(self, local_path, model_name="brain"):
-        path_to_model = os.path.join(local_path, model_name)
-        run_model = Model(
-            path=path_to_model, name=model_name,
-            description="JAX ML Model created from run and converted to Tensorflow Saved Model.",
-            type="custom_model"
         )
 
-        return run_model
-
-    def _get_model_from_job_name(self, job_name, model_name="brain"):
-
-        run_model = Model(
-            path=f"azureml://jobs/{job_name}/outputs/artifacts/models/{model_name}", name=model_name,
-            description="JAX ML Model created from run and converted to Tensorflow Saved Model.",
-            type="custom_model"
-        )
-        return run_model
+        # create a blue deployment
+        endpoint = self.ml_client.online_endpoints.get(
+            name=PipelineConfig.deployment_config.online_endpoint_name)
+        endpoint.traffic = {deployment_name: 100}
+        self.ml_client.begin_create_or_update(blue_deployment).result()
+        self.ml_client.begin_create_or_update(endpoint)
 
     def submit_pipeline_job(self, pipeline_definition):
         pipeline_instance = pipeline_definition()
