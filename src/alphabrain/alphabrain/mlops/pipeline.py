@@ -12,7 +12,7 @@ environment = Environment(
     # build=BuildContext(path="../"),
     # name="jax-training-environment"
     name="jax-training-environment",
-    build=BuildContext(path=Path(__file__).resolve().parents[0])
+    build=BuildContext(path=Path(__file__).resolve().parents[2])
 )
 
 
