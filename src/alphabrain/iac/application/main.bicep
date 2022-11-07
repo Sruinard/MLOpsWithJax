@@ -48,11 +48,15 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-12-01-pr
   name: '${containerRegistryName}${uniqueString(resourceGroup().id)}'
 }
 
-param containerAppsObjects object = {
-  founders: {
-    appName: 'microbrain'
+module containerAppsRestAPI './modules/application.bicep' = {
+  name: 'microbrain_restapi'
+  params: {
+    location: location
+    containerAppName: 'microbrainrestapi'
+    environmentID: environment.id
+
     containerImage: '${containerRegistryName}${uniqueString(resourceGroup().id)}.azurecr.io/microbrain:latest'
-    command: [ 'python -m uvicorn alphabrain.app:app' ]
+    command: [ 'python', 'alphabrain/app.py' ]
     containerPort: 8000
     env: [
       {
@@ -60,26 +64,39 @@ param containerAppsObjects object = {
         value: 'Application running on port 8000'
       }
     ]
-  }
-}
-
-module containerApps './modules/application.bicep' = [for app in items(containerAppsObjects): {
-  name: app.value.appName
-  params: {
-    location: location
-    containerAppName: app.value.appName
-    environmentID: environment.id
-    containerImage: app.value.containerImage
-    containerPort: app.value.containerPort
-    command: app.value.command
-
-    env: app.value.env
     containerRegistryName: containerRegistry.name
     containerLoginServer: containerRegistry.properties.loginServer
     containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
 
   }
-}]
+}
+
+module containerAppsGraphQL './modules/application.bicep' = {
+  name: 'microbrain_graphql'
+  params: {
+    location: location
+    containerAppName: 'microbraingraphql'
+    environmentID: environment.id
+    containerImage: '${containerRegistryName}${uniqueString(resourceGroup().id)}.azurecr.io/microbrain:latest'
+    containerPort: 8181
+    command: [ 'python', 'alphabrain/graphql_api.py' ]
+
+    env: [
+      {
+        name: 'PORT_NUMBER'
+        value: 'Application running on port 8181'
+      }
+      {
+        name: 'ALPHABRAIN_ENDPOINT'
+        value: 'https://${containerAppsRestAPI.outputs.fqdn}'
+      }
+    ]
+    containerRegistryName: containerRegistry.name
+    containerLoginServer: containerRegistry.properties.loginServer
+    containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
+
+  }
+}
 
 output location string = location
 output environmentId string = environment.id

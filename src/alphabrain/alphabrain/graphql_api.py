@@ -1,29 +1,56 @@
 
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
-import uvicorn
-import pathlib
+import json
 import os
+import random
+from dataclasses import dataclass
+
+import requests
 import strawberry
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
+
+from alphabrain.config import GraphAPIConfig
+
+
+@strawberry.type
+class AdditionProblem:
+    digit_1: int
+    digit_2: int
+
+
+@strawberry.type
+class InferredSolution:
+    inputs: str
+    outputs: str
+    combined: str
 
 
 @strawberry.type
 class Query:
+
     @strawberry.field
+    def get_addition_problem_to_solve(self) -> AdditionProblem:
+        digit_1, digit_2 = sorted((
+            random.randint(0, 99), random.randint(0, 999)))
+        return AdditionProblem(digit_1=digit_1, digit_2=digit_2)
+
+    @ strawberry.field
     def hello(self) -> str:
         return "Hello World"
 
 
-@strawberry.type
+@ strawberry.type
 class Mutation:
-    @strawberry.field
-    def compute(self, digit_1: str, digit_2: str) -> str:
-        return f"{digit_1}+{digit_2}={int(digit_1) + int(digit_2)}"
+    @ strawberry.field
+    def compute(self, digit_1: int, digit_2: int) -> InferredSolution:
+        url = f"{GraphAPIConfig.microbrain_endpoint}/models/brain/predict"
+        data = {"body": f"{digit_1}+{digit_2}"}
+        predictions = requests.post(url=url, data=json.dumps(data), headers={
+                                    'Content-Type': "application/json"}).json()
 
-    def find_similarity(self, query: str) -> [str]:
-        print(query)
-        return ["doc_id_1", "doc_id_2"]
+        return InferredSolution(**predictions)
 
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
@@ -52,4 +79,4 @@ app.include_router(graphql_app, prefix="/graphql")
 
 if __name__ == "__main__":
     # run uvicorn on port environment variable PORT or 8000
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8181)))

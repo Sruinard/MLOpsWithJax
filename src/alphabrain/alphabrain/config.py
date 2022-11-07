@@ -41,3 +41,8 @@ class PipelineConfig:
     train_config: TrainConfig = TrainConfig()
     deployment_config: DeploymentConfig = DeploymentConfig()
     azure_ml_config: AzureMLConfig = AzureMLConfig()
+
+
+class GraphAPIConfig:
+    microbrain_endpoint: str = os.environ.get(
+        "ALPHABRAIN_ENDPOINT", "http://localhost:8000")

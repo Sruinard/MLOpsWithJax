@@ -11,6 +11,7 @@ az deployment group create --resource-group csu-nl-innovative-ml-apps --template
 az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file=iac/mlops.bicep --parameters image_uri=csu-nl-innovative-ml-apps --parameters ml_workspace_name=alphabrain-platform-auofwmqbg5jr2
 
 az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file=iac/application/container_registry.bicep
+az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file=iac/application/main.bicep
 
 az acr login --name microbrainmlopsauofwmqbg5jr2 
 docker build -t microbrain .

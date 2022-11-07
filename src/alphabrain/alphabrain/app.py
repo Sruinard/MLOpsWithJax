@@ -2,6 +2,7 @@
 import os
 
 from dataclasses import dataclass
+from pydantic import BaseModel
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,9 +31,14 @@ app.add_middleware(
 )
 
 
-@dataclass
-class InferenceRequest:
+class InferenceRequest(BaseModel):
     body: str
+
+
+class InferenceResult(BaseModel):
+    inputs: str
+    outputs: str
+    combined: str
 
 
 @app.get("/")
@@ -48,9 +54,10 @@ def submit_pipeline_run():
 
 
 @app.post("/models/{model_name}/predict")
-def invoke_ml_endpoint(inference_request: InferenceRequest, model_name: str):
+def invoke_ml_endpoint(model_name: str, inference_request: InferenceRequest) -> InferenceResult:
     inference_pipeline = serving.InferencePipelineFactory(
     ).get_inference_pipeline(model_name)
+
     prediction = inference_pipeline.predict(inference_request.body)
     return {
         "inputs": inference_request.body,

@@ -36,6 +36,7 @@ class IInferencePipeline:
 
 class MicroBrainInferencePipeline(IInferencePipeline):
     def __init__(self, ctable=transform.CharacterTable('0123456789+= ', PipelineConfig.train_config.max_len_query_digit)):
+        super().__init__()
         self.ctable = ctable
 
     def _preprocessing(self, input_query: str):
