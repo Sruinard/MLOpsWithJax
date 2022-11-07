@@ -9,3 +9,10 @@ docker push alphabraincrauofwmqbg5jr2.azurecr.io/jaxserving
 
 az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file=iac/ml_platform.bicep
 az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file=iac/mlops.bicep --parameters image_uri=csu-nl-innovative-ml-apps --parameters ml_workspace_name=alphabrain-platform-auofwmqbg5jr2
+
+az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file=iac/application/container_registry.bicep
+
+az acr login --name microbrainmlopsauofwmqbg5jr2 
+docker build -t microbrain .
+docker tag microbrain microbrainmlopsauofwmqbg5jr2.azurecr.io/microbrain
+docker push microbrainmlopsauofwmqbg5jr2.azurecr.io/microbrain

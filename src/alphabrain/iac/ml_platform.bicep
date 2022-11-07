@@ -120,24 +120,7 @@ resource mlworkspace 'Microsoft.MachineLearningServices/workspaces@2022-06-01-Pr
   }
 }
 
-// var roleDefinitionResourceIdStorage = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
 var roleDefinitionResourceId = 'f6c7c914-8db3-469d-8ca1-694a8f32e121' // AzureML data sciencist role
-
-// @description('This is the built-in Contributor role. See https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#contributor')
-// resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
-//   scope: subscription()
-//   name: roleDefinitionResourceId
-// }
-
-// resource StorageAccountReaderRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-//   name: guid(resourceGroup().id, subscription().id, uuid, roleDefinitionResourceIdStorage)
-//   scope: MLStorageAccount
-//   properties: {
-//     principalId: MLStorageAccount.identity.principalId
-//     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionResourceIdStorage)
-//     principalType: 'ServicePrincipal'
-//   }
-// }
 
 resource WorkspaceContributorAccess 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(resourceGroup().id, subscription().id, roleDefinitionResourceId)

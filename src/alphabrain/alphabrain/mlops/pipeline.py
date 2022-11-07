@@ -1,16 +1,18 @@
 import os
+from pathlib import Path
 
 from alphabrain.mlops.trainer.azure_ml_repo import AzureMLRepo
 from alphabrain.mlops.trainer import train
 from alphabrain.config import PipelineConfig
 from azure.ai.ml import dsl
-from azure.ai.ml import load_component
 from azure.ai.ml.entities import Environment, AmlCompute, BuildContext
 from mldesigner import command_component, Input, Output
 
 environment = Environment(
-    build=BuildContext(path="../"),
-    name="jax-training-environment"
+    # build=BuildContext(path="../"),
+    # name="jax-training-environment"
+    name="jax-training-environment",
+    build=BuildContext(path=Path(__file__).resolve().parents[0])
 )
 
 
@@ -19,9 +21,7 @@ environment = Environment(
     version="1",
     display_name="Train Jax Model",
     description="Train a jax model to be able to add digits",
-    # environment=env
     environment=environment
-    # environment=f"{PipelineConfig.infra_config.custom_env_name}@latest"
 )
 def train_and_eval_model_job(serving_model_dir: Output(type="uri_folder", mode="upload"), logs_dir: Output(type="uri_folder", mode="upload")):
     _ = train.train_and_evaluate(

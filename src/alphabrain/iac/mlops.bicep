@@ -1,7 +1,7 @@
 param ml_workspace_name string
 param image_uri string
 
-param environment_version string = '1'
+param environment_version string = '2'
 param ml_model_name string = 'brain'
 param location string = resourceGroup().location
 
