@@ -26,7 +26,7 @@ jobs:
           echo 'registry=$(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)' >> $GITHUB_OUTPUT
       - name: upload containers
         run: |
-          ./iac/fusion_team/build_and_push_containers_to_registry.sh ${{steps.get_container_registry_name.outputs.registry}}
+          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)
 
   deploy_serving_infrastructure:
     runs-on: ubuntu-latest
