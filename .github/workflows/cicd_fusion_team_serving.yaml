@@ -6,11 +6,11 @@ on:
 
 env:
   RESOURCE_GROUP: "csu-nl-innovative-ml-apps"
+defaults:
+  run:
+    working-directory: ./src/alphabrain
 jobs:
   upload_serving_container_image:
-    defaults:
-      run:
-        working-directory: ./src/alphabrain
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
       - name: deploy serving infra
         id: deploy_infra
         run: |
-          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./src/alphabrain/iac/fusion_team/container_registry.bicep
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
       - name: get_container_registry_name
         run: |
           echo "registry=$(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)" >> $GITHUB_OUTPUT
@@ -40,8 +40,8 @@ jobs:
       - name: deploy ml serving infra
         id: deploy_infra
         run: |
-          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./src/alphabrain/iac/fusion_team/serving_infrastructure.bicep
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep
       - name: deploy apps infra
         id: deploy_apps_infra
         run: |
-          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./src/alphabrain/iac/fusion_team/main.bicep
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/main.bicep
