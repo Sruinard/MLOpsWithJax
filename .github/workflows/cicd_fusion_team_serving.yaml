@@ -23,7 +23,7 @@ jobs:
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
       - name: get_container_registry_name
         run: |
-          echo "registry=$(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)" >> $GITHUB_OUTPUT
+          echo 'registry=$(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)' >> $GITHUB_OUTPUT
       - name: upload containers
         run: |
           ./iac/fusion_team/build_and_push_containers_to_registry.sh ${{steps.get_container_registry_name.outputs.registry}}
