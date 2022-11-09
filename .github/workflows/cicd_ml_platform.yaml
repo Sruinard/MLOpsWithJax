@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  RESOURCE_GROUP: "csu-nl-innovative-ml-apps"
+jobs:
+  deploy_ml_platform_environment:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      registry: ${{ steps.deploy_infra.outputs.registry }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: deploy infra
+        id: deploy_infra
+        run: |
+          echo "registry=$(az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/ml_platform_team/ml_platform.bicep --query properties.outputs.containerRegistryName.value)" >> $GITHUB_OUTPUT
