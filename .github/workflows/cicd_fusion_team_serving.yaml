@@ -8,8 +8,10 @@ env:
   RESOURCE_GROUP: "csu-nl-innovative-ml-apps"
 jobs:
   upload_serving_container_image:
+    defaults:
+      run:
+        working-directory: ./src/alphabrain
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: azure/login@v1
