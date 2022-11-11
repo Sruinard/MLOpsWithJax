@@ -21,3 +21,6 @@ jobs:
         id: deploy_infra
         run: |
           echo "registry=$(az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/ml_platform_team/ml_platform.bicep --query properties.outputs.containerRegistryName.value)" >> $GITHUB_OUTPUT
+      - name: upload serving container
+        run: |
+          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv)

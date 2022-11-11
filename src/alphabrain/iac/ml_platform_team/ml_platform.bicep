@@ -4,7 +4,7 @@ var uuid = uniqueString(resourceGroup().id)
 var department_name = 'alphabrain'
 var workspace_name = '${department_name}-platform-${uuid}'
 var application_insights_name = '${department_name}-appinsights'
-var container_registry_name = '${department_name}cr${uuid}'
+var container_registry_name = '${department_name}platformcr${uuid}'
 
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: application_insights_name

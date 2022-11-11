@@ -21,12 +21,9 @@ jobs:
         id: deploy_infra
         run: |
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
-      - name: get_container_registry_name
-        run: |
-          echo 'registry=$(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)' >> $GITHUB_OUTPUT
       - name: upload containers
         run: |
-          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)
+          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv) $(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv)
 
   deploy_serving_infrastructure:
     runs-on: ubuntu-latest
@@ -40,8 +37,12 @@ jobs:
       - name: deploy ml serving infra
         id: deploy_infra
         run: |
-          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep \
+            --parameters image_uri=$(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest \
+            --parameters ml_workspace_name=$(az ml workspace list --resource-group=csu-nl-innovative-ml-apps --query "[].{name: name}" --output tsv)
       - name: deploy apps infra
         id: deploy_apps_infra
         run: |
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/main.bicep
+
+# $(az ml workspace list --resource-group csu-nl-innovative-ml-apps --query "[].{Name:name}"  --output tsv)  ${{ mlops_container_registry_name }}.azurecr.io/jaxserving:latest --resource-group ${{ env.resource_group }}

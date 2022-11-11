@@ -32,8 +32,10 @@ class InfraConfig:
 
 
 class DeploymentConfig:
-    online_endpoint_name: str = "alphabrain-online-endpoint"
-    serving_environment_name: str = "jaxserving"
+    online_endpoint_name: str = os.environ.get(
+        "AZUREML_ONLINE_ENDPOINT", "alphabrain-online-endpoint")
+    serving_environment_name: str = os.environ.get(
+        "SERVING_ENVIRONMENT_NAME", "jaxserving")
 
 
 class PipelineConfig:

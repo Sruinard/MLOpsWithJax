@@ -48,7 +48,7 @@ class MicroBrainInferencePipeline(IInferencePipeline):
 
     def _inference(self, inputs: Tuple[Array, Array]):
         encoder_inputs, decoder_inputs = inputs
-        url = 'https://alphabrain-online-endpoint.westeurope.inference.ml.azure.com/v1/models/brain:predict'
+        url = f'https://{PipelineConfig.deployment_config.online_endpoint_name}.westeurope.inference.ml.azure.com/v1/models/brain:predict'
 
         # The azureml-model-deployment header will force the request to go to a specific deployment.
         # Remove this header to have the request observe the endpoint traffic rules
