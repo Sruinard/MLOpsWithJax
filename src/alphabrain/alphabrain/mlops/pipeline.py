@@ -9,8 +9,6 @@ from azure.ai.ml.entities import Environment, AmlCompute, BuildContext
 from mldesigner import command_component, Input, Output
 
 environment = Environment(
-    # build=BuildContext(path="../"),
-    # name="jax-training-environment"
     name="jax-training-environment",
     build=BuildContext(path=Path(__file__).resolve().parents[2])
 )
