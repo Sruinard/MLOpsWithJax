@@ -50,6 +50,6 @@ jobs:
 
 # $(az ml workspace list --resource-group csu-nl-innovative-ml-apps --query "[].{Name:name}"  --output tsv)  ${{ mlops_container_registry_name }}.azurecr.io/jaxserving:latest --resource-group ${{ env.resource_group }}
 
-az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file ./iac/fusion_team/serving_infrastructure.bicep \
-  --parameters ml_workspace_name=$(az ml workspace list --resource-group=csu-nl-innovative-ml-apps --query "[].{name: name}" --output tsv) \
-  --parameters image_uri=$(az acr list --resource-group csu-nl-innovative-ml-apps --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest
+# az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file ./iac/fusion_team/serving_infrastructure.bicep \
+#   --parameters ml_workspace_name=$(az ml workspace list --resource-group=csu-nl-innovative-ml-apps --query "[].{name: name}" --output tsv) \
+#   --parameters image_uri=$(az acr list --resource-group csu-nl-innovative-ml-apps --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest
