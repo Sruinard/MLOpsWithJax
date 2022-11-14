@@ -34,15 +34,22 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: install ml extension
+        run: |
+          az extension add --name ml
       - name: deploy ml serving infra
         id: deploy_infra
         run: |
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep \
             --parameters image_uri=$(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest \
-            --parameters ml_workspace_name=$(az ml workspace list --resource-group=csu-nl-innovative-ml-apps --query "[].{name: name}" --output tsv)
+            --parameters ml_workspace_name=$(az ml workspace list --resource-group=${{env.RESOURCE_GROUP}} --query "[].{name: name}" --output tsv)
       - name: deploy apps infra
         id: deploy_apps_infra
         run: |
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/main.bicep
 
 # $(az ml workspace list --resource-group csu-nl-innovative-ml-apps --query "[].{Name:name}"  --output tsv)  ${{ mlops_container_registry_name }}.azurecr.io/jaxserving:latest --resource-group ${{ env.resource_group }}
+
+az deployment group create --resource-group csu-nl-innovative-ml-apps --template-file ./iac/fusion_team/serving_infrastructure.bicep \
+  --parameters ml_workspace_name=$(az ml workspace list --resource-group=csu-nl-innovative-ml-apps --query "[].{name: name}" --output tsv) \
+  --parameters image_uri=$(az acr list --resource-group csu-nl-innovative-ml-apps --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest

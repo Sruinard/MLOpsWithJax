@@ -4,7 +4,7 @@ param environmentID string
 
 param containerImage string
 param containerPort int
-param command array
+param command array = []
 
 param isPrivateRegistry bool = true
 param containerRegistryName string

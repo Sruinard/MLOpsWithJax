@@ -98,5 +98,34 @@ module containerAppsGraphQL './modules/application.bicep' = {
   }
 }
 
+var gatewayContainerApp = {
+  appName: 'gateway'
+  containerImage: '${containerRegistryName}${uniqueString(resourceGroup().id)}.azurecr.io/gateway:latest'
+  containerPort: 7000
+  env: [
+    {
+      name: 'ALPHABRAIN_ENDPOINT'
+      value: 'https://${containerAppsGraphQL.outputs.fqdn}/graphql'
+    }
+  ]
+}
+
+module gatewayApp './modules/application.bicep' = {
+  name: 'gateway'
+  params: {
+    location: location
+    containerAppName: gatewayContainerApp.appName
+    environmentID: environment.id
+    containerImage: gatewayContainerApp.containerImage
+    containerPort: gatewayContainerApp.containerPort
+
+    env: gatewayContainerApp.env
+    containerRegistryName: containerRegistry.name
+    containerLoginServer: containerRegistry.properties.loginServer
+    containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
+
+  }
+}
+
 output location string = location
 output environmentId string = environment.id
