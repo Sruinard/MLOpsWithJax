@@ -53,7 +53,8 @@ class Mutation:
         return InferredSolution(**predictions)
 
 
-schema = strawberry.Schema(query=Query, mutation=Mutation)
+schema = strawberry.federation.Schema(query=Query, mutation=Mutation)
+
 
 graphql_app = GraphQLRouter(schema)
 
