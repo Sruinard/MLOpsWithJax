@@ -10,6 +10,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
+from strawberry.asgi import GraphQL
 
 from alphabrain.config import GraphAPIConfig
 
@@ -56,7 +57,7 @@ class Mutation:
 schema = strawberry.federation.Schema(query=Query, mutation=Mutation)
 
 
-graphql_app = GraphQLRouter(schema)
+graphql_app = GraphQL(schema)
 
 app = FastAPI()
 
@@ -76,7 +77,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(graphql_app, prefix="/graphql")
+
+app.add_route("/graphql", graphql_app)
+app.add_websocket_route("/graphql", graphql_app)
+
+
+# app.include_router(graphql_app, prefix="/graphql")
 
 if __name__ == "__main__":
     # run uvicorn on port environment variable PORT or 8000
