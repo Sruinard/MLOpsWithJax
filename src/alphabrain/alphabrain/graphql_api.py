@@ -31,6 +31,7 @@ class InferredSolution:
 
 @strawberry.type
 class Query:
+    # required by Apollo Server
     _service: Optional[str]
 
     @strawberry.field
@@ -83,9 +84,6 @@ app.add_middleware(
 
 app.add_route("/graphql", graphql_app)
 app.add_websocket_route("/graphql", graphql_app)
-
-
-# app.include_router(graphql_app, prefix="/graphql")
 
 if __name__ == "__main__":
     # run uvicorn on port environment variable PORT or 8000

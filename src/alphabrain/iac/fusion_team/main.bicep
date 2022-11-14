@@ -5,6 +5,10 @@ param containerRegistryName string = 'microbrainmlops'
 param logAnalyticsWorkspaceName string = 'logs-${environmentName}-${uniqueString(resourceGroup().id)}'
 param appInsightsName string = 'appins-${environmentName}-${uniqueString(resourceGroup().id)}'
 
+var uuid = uniqueString(resourceGroup().id)
+var department_name = 'alphabrain'
+var workspace_name = '${department_name}-platform-${uuid}'
+
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
   name: logAnalyticsWorkspaceName
   location: location
@@ -62,6 +66,18 @@ module containerAppsRestAPI './modules/application.bicep' = {
       {
         name: 'PORT_NUMBER'
         value: 'Application running on port 8000'
+      }
+      {
+        name: 'SUBSCRIPTION_ID'
+        value: subscription().id
+      }
+      {
+        name: 'RESOURCE_GROUP'
+        value: resourceGroup().name
+      }
+      {
+        name: 'AZUREML_WORKSPACE_NAME'
+        value: workspace_name
       }
     ]
     containerRegistryName: containerRegistry.name

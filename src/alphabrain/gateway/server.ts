@@ -6,7 +6,6 @@ const gateway = new ApolloGateway({
     {
       name: "alphabrain",
       url: process.env.ALPHABRAIN_ENDPOINT
-      // url: 'https://microbraingraphql--2jjxl8i.jollypebble-cb4fc58a.westeurope.azurecontainerapps.io/graphql'
     },
   ],
   experimental_pollInterval: 2000,
