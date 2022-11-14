@@ -23,7 +23,7 @@ jobs:
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
       - name: upload containers
         run: |
-          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv) $(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv)
+          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)
 
   deploy_serving_infrastructure:
     runs-on: ubuntu-latest
