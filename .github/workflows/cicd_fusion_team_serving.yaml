@@ -10,24 +10,24 @@ defaults:
   run:
     working-directory: ./src/alphabrain
 jobs:
-  # upload_serving_container_image:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: azure/login@v1
-  #       with:
-  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #     - name: deploy serving infra
-  #       id: deploy_infra
-  #       run: |
-  #         az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
-  #     - name: upload containers
-  #       run: |
-  #         ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)
+  upload_serving_container_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: deploy serving infra
+        id: deploy_infra
+        run: |
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
+      - name: upload containers
+        run: |
+          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)
 
   deploy_serving_infrastructure:
     runs-on: ubuntu-latest
-    # needs: upload_serving_container_image
+    needs: upload_serving_container_image
 
     steps:
       - uses: actions/checkout@v3
@@ -37,12 +37,12 @@ jobs:
       - name: install ml extension
         run: |
           az extension add --name ml
-      # - name: deploy ml serving infra
-      #   id: deploy_infra
-      #   run: |
-      #     az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep \
-      #       --parameters image_uri=$(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest \
-      #       --parameters ml_workspace_name=$(az ml workspace list --resource-group=${{env.RESOURCE_GROUP}} --query "[].{name: name}" --output tsv)
+      - name: deploy ml serving infra
+        id: deploy_infra
+        run: |
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep \
+            --parameters image_uri=$(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest \
+            --parameters ml_workspace_name=$(az ml workspace list --resource-group=${{env.RESOURCE_GROUP}} --query "[].{name: name}" --output tsv)
       - name: deploy apps infra
         id: deploy_apps_infra
         run: |
