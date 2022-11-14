@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import requests
 import strawberry
 import uvicorn
+from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
@@ -30,6 +31,7 @@ class InferredSolution:
 
 @strawberry.type
 class Query:
+    _service: Optional[str]
 
     @strawberry.field
     def get_addition_problem_to_solve(self) -> AdditionProblem:
@@ -54,7 +56,8 @@ class Mutation:
         return InferredSolution(**predictions)
 
 
-schema = strawberry.federation.Schema(query=Query, mutation=Mutation)
+schema = strawberry.federation.Schema(
+    query=Query, mutation=Mutation, types=[AdditionProblem])
 
 
 graphql_app = GraphQL(schema)

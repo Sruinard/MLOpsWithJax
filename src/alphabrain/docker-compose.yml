@@ -1,0 +1,22 @@
+services:
+  gateway:
+    build:
+      context: ./gateway
+    networks: [ berry ]
+    hostname: gateway
+    depends_on: [ mlops ]
+    ports:
+      - "4000:7000"
+
+    environment:
+      - ALPHABRAIN_ENDPOINT=http://mlops:8181/graphql
+
+  mlops:
+    build:
+      context: .
+    networks: [ berry ]
+    command: [ 'python', 'alphabrain/graphql_api.py' ]
+    hostname: mlops
+
+networks:
+  berry:
