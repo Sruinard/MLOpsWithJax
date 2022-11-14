@@ -78,7 +78,6 @@ var roleDefinitionResourceId = 'f6c7c914-8db3-469d-8ca1-694a8f32e121' // AzureML
 
 resource WorkspaceContributorAccess 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(containerApp.name, environmentID, resourceGroup().id, roleDefinitionResourceId)
-  scope: resourceGroup()
   properties: {
     principalId: containerApp.identity.principalId
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionResourceId)
@@ -87,3 +86,5 @@ resource WorkspaceContributorAccess 'Microsoft.Authorization/roleAssignments@202
 }
 
 output fqdn string = enableIngress ? containerApp.properties.configuration.ingress.fqdn : 'Ingress not enabled'
+
+
