@@ -1,9 +1,9 @@
 param location string = resourceGroup().location
 
 var uuid = uniqueString(resourceGroup().id)
-var department_name = 'alphabrain'
-var workspace_name = '${department_name}-platform-${uuid}'
-var application_insights_name = '${department_name}-appinsights'
+var department_name = 'mb'
+var workspace_name = '${department_name}-pf-${uuid}'
+var application_insights_name = '${department_name}-ain${uuid}'
 var container_registry_name = '${department_name}platformcr${uuid}'
 
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {

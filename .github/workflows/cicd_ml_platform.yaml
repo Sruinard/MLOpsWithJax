@@ -26,7 +26,7 @@ jobs:
           echo "registry=$(az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/ml_platform_team/ml_platform.bicep --query properties.outputs.containerRegistryName.value)" >> $GITHUB_OUTPUT
       - name: upload serving container
         run: |
-          ./iac/ml_platform_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv)
+          ./iac/ml_platform_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'mbplatform')][name]" --output tsv)
 
   upload_serving_container_image:
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
         id: deploy_infra
         run: |
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/serving_infrastructure.bicep \
-            --parameters image_uri=$(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'alphabrainplatform')][name]" --output tsv).azurecr.io/jaxserving:latest \
+            --parameters image_uri=$(az acr list --resource-group ${{env.RESOURCE_GROUP}} --query "[?contains(name, 'mbplatform')][name]" --output tsv).azurecr.io/jaxserving:latest \
             --parameters ml_workspace_name=$(az ml workspace list --resource-group=${{env.RESOURCE_GROUP}} --query "[].{name: name}" --output tsv)
       - name: deploy apps infra
         id: deploy_apps_infra
