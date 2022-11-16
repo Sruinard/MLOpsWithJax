@@ -70,7 +70,7 @@ module containerAppsRestAPI './modules/application.bicep' = {
       }
       {
         name: 'SUBSCRIPTION_ID'
-        value: subscription().id
+        value: subscription().subscriptionId
       }
       {
         name: 'RESOURCE_GROUP'
