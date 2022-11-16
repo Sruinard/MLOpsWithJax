@@ -10,7 +10,7 @@ from mldesigner import command_component, Input, Output
 
 environment = Environment(
     name="jax-training-environment",
-    build=BuildContext(path=Path(__file__).resolve().parents[2])
+    build=BuildContext(path=Path(__file__).resolve().parents[3])
 )
 
 
