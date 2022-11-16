@@ -3,7 +3,7 @@ from pathlib import Path
 
 from alphabrain.mlops.trainer.azure_ml_repo import AzureMLRepo
 from alphabrain.mlops.trainer import train
-from alphabrain.config import PipelineConfig
+from alphabrain.config import PipelineConfig, AzureMLConfig, DeploymentConfig
 from azure.ai.ml import dsl
 from azure.ai.ml.entities import Environment, AmlCompute, BuildContext
 from mldesigner import command_component, Input, Output
@@ -12,6 +12,11 @@ environment = Environment(
     name="jax-training-environment",
     build=BuildContext(path=Path(__file__).resolve().parents[2])
 )
+environment.environment_variables['SUBSCRIPTION_ID'] = AzureMLConfig.subscription_id
+environment.environment_variables['RESOURCE_GROUP'] = AzureMLConfig.resource_group_name
+environment.environment_variables['AZUREML_WORKSPACE_NAME'] = AzureMLConfig.workspace_name
+environment.environment_variables['AZUREML_ONLINE_ENDPOINT'] = DeploymentConfig.online_endpoint_name
+environment.environment_variables['SERVING_ENVIRONMENT_NAME'] = DeploymentConfig.serving_environment_name
 
 
 @command_component(
