@@ -25,7 +25,7 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 resource MLStorageAccount 'Microsoft.Storage/storageAccounts@2021-01-01' = {
-  name: '${department_name}storage'
+  name: '${department_name}storage${uuid}'
   location: location
   sku: {
     name: 'Standard_RAGRS'
