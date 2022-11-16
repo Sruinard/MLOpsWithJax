@@ -8,7 +8,7 @@ param appInsightsName string = 'appins-${environmentName}-${uniqueString(resourc
 var uuid = uniqueString(resourceGroup().id)
 var department_name = 'alphabrain'
 var workspace_name = '${department_name}-platform-${uuid}'
-var unique_endpoint_name = 'microbrain-online-endpoint${uuid}'
+var unique_endpoint_name = 'moe${uuid}'
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
   name: logAnalyticsWorkspaceName

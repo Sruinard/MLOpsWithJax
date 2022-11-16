@@ -5,8 +5,7 @@ param environment_version string = '10'
 param ml_model_name string = 'brain'
 param location string = resourceGroup().location
 var uuid = uniqueString(resourceGroup().id)
-var unique_endpoint_name = 'microbrain-online-endpoint${uuid}'
-
+var unique_endpoint_name = 'moe${uuid}'
 
 resource serving_image 'Microsoft.MachineLearningServices/workspaces/environments/versions@2022-06-01-preview' = {
   name: '${ml_workspace_name}/jaxserving/${environment_version}'
