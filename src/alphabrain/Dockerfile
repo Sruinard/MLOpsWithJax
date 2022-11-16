@@ -20,7 +20,7 @@ RUN poetry config virtualenvs.create false \
 
 
 COPY alphabrain alphabrain
-COPY Dockerfile alphabrain
+COPY Dockerfile .
 RUN poetry install --no-interaction
 
 # CMD ["python3", "alphabrain/app.py"]
