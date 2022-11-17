@@ -34,5 +34,5 @@ docker push $CONTAINER_NAME.azurecr.io/gateway:latest
 
 
 az acr login --name $CONTAINER_MLOPS_NAME
-docker tag microbrain $CONTAINER_MLOPS_NAME.azurecr.io/microbrain:latest
-docker push $CONTAINER_MLOPS_NAME.azurecr.io/microbrain:latest
+docker tag microbrain $CONTAINER_MLOPS_NAME.azurecr.io/jaxtraining:latest
+docker push $CONTAINER_MLOPS_NAME.azurecr.io/jaxtraining:latest
