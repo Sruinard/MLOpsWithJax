@@ -42,7 +42,7 @@ jobs:
           az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/container_registry.bicep
       - name: upload containers
         run: |
-          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv)
+          ./iac/fusion_team/build_and_push_containers_to_registry.sh $(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv) ${{env.RESOURCE_GROUP}}
 
   deploy_serving_infrastructure:
     runs-on: ubuntu-latest
@@ -56,6 +56,7 @@ jobs:
       - name: install ml extension
         run: |
           az extension add --name ml
+          az extension add --name account
       - name: deploy ml serving infra
         id: deploy_infra
         run: |
@@ -65,4 +66,6 @@ jobs:
       - name: deploy apps infra
         id: deploy_apps_infra
         run: |
-          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/main.bicep
+          az deployment group create --resource-group ${{env.RESOURCE_GROUP}} --template-file ./iac/fusion_team/main.bicep \
+            --parameters image_uri_training=$(az acr list --resource-group ${{env.RESOURCE_GROUP}}  --query "[?contains(name, 'microbrainmlops')][name]" --output tsv).azurecr.io/jaxtraining:latest \
+            --parameters ml_workspace_name=$(az ml workspace list --resource-group=${{env.RESOURCE_GROUP}} --query "[].{name: name}" --output tsv)

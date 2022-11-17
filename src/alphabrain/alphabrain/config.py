@@ -6,11 +6,11 @@ load_dotenv()
 
 class AzureMLConfig:
     subscription_id = os.environ.get(
-        "SUBSCRIPTION_ID", "0abb6ec5-9030-4b3f-af04-09183c688576")
+        "SUBSCRIPTION_ID")
     resource_group_name = os.environ.get(
-        "RESOURCE_GROUP", "csu-nl-innovative-ml-apps")
+        "RESOURCE_GROUP")
     workspace_name = os.environ.get(
-        "AZUREML_WORKSPACE_NAME", "alphabrain-platform-auofwmqbg5jr2")
+        "AZUREML_WORKSPACE_NAME")
 
 
 class TrainConfig:
@@ -25,15 +25,13 @@ class TrainConfig:
 
 
 class InfraConfig:
-    custom_env_name: str = os.environ.get(
-        "CUSTOM_ENV_NAME", "training-environment")
-    compute_cluster: str = os.environ.get(
-        "compute_cluster", "cpu-cluster")
+    train_env: str = os.environ.get("TRAIN_ENV")
+    compute_cluster: str = os.environ.get("COMPUTE_CLUSTER", "cpu-cluster")
 
 
 class DeploymentConfig:
     online_endpoint_name: str = os.environ.get(
-        "AZUREML_ONLINE_ENDPOINT", "alphabrain-online-endpoint")
+        "AZUREML_ONLINE_ENDPOINT")
     serving_environment_name: str = os.environ.get(
         "SERVING_ENVIRONMENT_NAME", "jaxserving")
 

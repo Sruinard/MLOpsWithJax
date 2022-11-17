@@ -13,7 +13,7 @@ from datetime import datetime
 class AzureMLRepo:
 
     def __init__(self, azure_ml_config: AzureMLConfig = AzureMLConfig()):
-        self.ml_client = MLClient(DefaultAzureCredential(), azure_ml_config.subscription_id,
+        self.ml_client: MLClient = MLClient(DefaultAzureCredential(), azure_ml_config.subscription_id,
                                   azure_ml_config.resource_group_name, azure_ml_config.workspace_name)
 
     def register_model(self, path_to_model_on_storage_account, model_artifact_name='alphabrain'):

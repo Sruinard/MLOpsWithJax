@@ -29,6 +29,7 @@ resource serving_image 'Microsoft.MachineLearningServices/workspaces/environment
   }
 }
 
+
 resource jax_online_endpoint 'Microsoft.MachineLearningServices/workspaces/onlineEndpoints@2022-06-01-preview' = {
   name: '${ml_workspace_name}/${unique_endpoint_name}'
   location: location

@@ -1,3 +1,6 @@
+param ml_workspace_name string
+param image_uri_training string
+
 param location string = resourceGroup().location
 param environmentName string = 'csu-nl-app-mlops'
 param containerRegistryName string = 'microbrainmlops'
@@ -9,6 +12,7 @@ var uuid = uniqueString(resourceGroup().id)
 var department_name = 'mb'
 var workspace_name = '${department_name}-pf-${uuid}'
 var unique_endpoint_name = 'moe${uuid}'
+var environment_version = '1'
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
   name: logAnalyticsWorkspaceName
@@ -84,6 +88,10 @@ module containerAppsRestAPI './modules/application.bicep' = {
         name: 'AZUREML_ONLINE_ENDPOINT_NAME'
         value: unique_endpoint_name
       }
+      {
+        name: 'TRAINING_ENV'
+        value: 'jaxtraining'
+      }
     ]
     containerRegistryName: containerRegistry.name
     containerLoginServer: containerRegistry.properties.loginServer
@@ -145,6 +153,14 @@ module gatewayApp './modules/application.bicep' = {
     containerLoginServer: containerRegistry.properties.loginServer
     containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
 
+  }
+}
+
+resource training_env 'Microsoft.MachineLearningServices/workspaces/environments/versions@2022-06-01-preview' = {
+  name: '${ml_workspace_name}/jaxtraining/${environment_version}'
+  properties: {
+    image: image_uri_training
+    osType: 'Linux'
   }
 }
 
