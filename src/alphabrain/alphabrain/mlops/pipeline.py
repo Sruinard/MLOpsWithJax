@@ -14,7 +14,7 @@ from mldesigner import command_component, Input, Output
 # )
 
 environment = AzureMLRepo().ml_client.environments.get(
-    name=PipelineConfig.infra_config.train_env, version='1')
+    name=PipelineConfig.infra_config.train_env, version='2')
 
 
 @command_component(

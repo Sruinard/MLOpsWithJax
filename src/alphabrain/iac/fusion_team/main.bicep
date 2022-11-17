@@ -12,7 +12,7 @@ var uuid = uniqueString(resourceGroup().id)
 var department_name = 'mb'
 var workspace_name = '${department_name}-pf-${uuid}'
 var unique_endpoint_name = 'moe${uuid}'
-var environment_version = '1'
+var environment_version = '2'
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
   name: logAnalyticsWorkspaceName
