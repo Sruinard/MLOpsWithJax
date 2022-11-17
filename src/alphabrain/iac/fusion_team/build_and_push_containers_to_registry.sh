@@ -6,12 +6,12 @@ RESOURCE_GROUP=$2
 az acr login --name $CONTAINER_NAME
 
 
-SUBSCRIPTION_ID=${az account show --query id}
+SUBSCRIPTION_ID=$(az account show --query id)
 RESOURCE_GROUP=$RESOURCE_GROUP
-AZUREML_WORKSPACE_NAME=${az ml workspace list --resource-group=$RESOURCE_GROUP --query "[].{name: name}" --output tsv}
-TRAIN_ENV=jax_training
+AZUREML_WORKSPACE_NAME=$(az ml workspace list --resource-group=$RESOURCE_GROUP --query "[].{name: name}" --output tsv)
+TRAIN_ENV='jaxtraining'
 COMPUTE_CLUSTER='cpu-cluster'
-AZUREML_ONLINE_ENDPOINT=${az ml online-endpoint list --resource-group=csu-nl-fresh-deployment --workspace-name=mb-pf-fpnllumqpjqe2 --query '[].name' --output tsv}
+AZUREML_ONLINE_ENDPOINT=$(az ml online-endpoint list --resource-group=$RESOURCE_GROUP --workspace-name=$AZUREML_WORKSPACE_NAME --query '[].name' --output tsv)
 
 
 docker build -t microbrain \
