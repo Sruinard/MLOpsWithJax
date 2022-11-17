@@ -7,13 +7,17 @@ CONTAINER_MLOPS_NAME=$3
 az acr login --name $CONTAINER_NAME
 
 
-SUBSCRIPTION_ID=$(az account show --query id)
+SUBSCRIPTION_ID=$(az account show --query id --output tsv)
 RESOURCE_GROUP=$RESOURCE_GROUP
 AZUREML_WORKSPACE_NAME=$(az ml workspace list --resource-group=$RESOURCE_GROUP --query "[].{name: name}" --output tsv)
 TRAIN_ENV='jaxtraining'
 COMPUTE_CLUSTER='cpu-cluster'
 AZUREML_ONLINE_ENDPOINT=$(az ml online-endpoint list --resource-group=$RESOURCE_GROUP --workspace-name=$AZUREML_WORKSPACE_NAME --query '[].name' --output tsv)
 
+
+echo $SUBSCRIPTION_ID
+echo $AZUREML_WORKSPACE_NAME
+echo $AZUREML_ONLINE_ENDPOINT
 
 docker build -t microbrain \
     --build-arg SUBSCRIPTION_ID=$SUBSCRIPTION_ID \
