@@ -57,6 +57,14 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-12-01-pr
   name: '${containerRegistryName}${uniqueString(resourceGroup().id)}'
 }
 
+// resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-12-01-preview' existing = {
+//   name: '${containerRegistryName}${uniqueString(resourceGroup().id)}'
+// }
+
+resource onlineEndpoint 'Microsoft.MachineLearningServices/workspaces/onlineEndpoints@2022-10-01' existing = {
+  name: '${ml_workspace_name}/${unique_endpoint_name}'
+}
+
 module containerAppsRestAPI './modules/application.bicep' = {
   name: 'microbrain_restapi'
   params: {
@@ -91,6 +99,10 @@ module containerAppsRestAPI './modules/application.bicep' = {
       {
         name: 'TRAINING_ENV'
         value: 'jaxtraining'
+      }
+      {
+        name: 'ENDPOINT_API_KEY'
+        value: onlineEndpoint.listKeys().primaryKey
       }
     ]
     containerRegistryName: containerRegistry.name

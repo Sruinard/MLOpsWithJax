@@ -34,6 +34,7 @@ class DeploymentConfig:
         "AZUREML_ONLINE_ENDPOINT")
     serving_environment_name: str = os.environ.get(
         "SERVING_ENVIRONMENT_NAME", "jaxserving")
+    endpoint_api_key: str = os.environ.get("ENDPOINT_API_KEY")
 
 
 class PipelineConfig:
