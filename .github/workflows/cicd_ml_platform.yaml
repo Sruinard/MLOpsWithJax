@@ -5,7 +5,7 @@ on:
       - main
 
 env:
-  RESOURCE_GROUP: "csu-nl-fresh-deployment"
+  RESOURCE_GROUP: "csu-nl-machine-learning-with-jax"
 defaults:
   run:
     working-directory: ./src/alphabrain
