@@ -100,10 +100,10 @@ module containerAppsRestAPI './modules/application.bicep' = {
         name: 'TRAINING_ENV'
         value: 'jaxtraining'
       }
-      {
-        name: 'ENDPOINT_API_KEY'
-        value: onlineEndpoint.listKeys().primaryKey
-      }
+      // {
+      //   name: 'ENDPOINT_API_KEY'
+      //   value: onlineEndpoint.listKeys().primaryKey
+      // }
     ]
     containerRegistryName: containerRegistry.name
     containerLoginServer: containerRegistry.properties.loginServer
