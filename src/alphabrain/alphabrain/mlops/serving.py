@@ -55,6 +55,8 @@ class MicroBrainInferencePipeline(IInferencePipeline):
         # , 'azureml-model-deployment': 'brain-deployment-20221104160432' }
         # access_token = self.ml_client.online_endpoints.get_keys(
         #     name=PipelineConfig.deployment_config.online_endpoint_name).access_token
+        # headers = {'Content-Type': 'application/json',
+        #            'Authorization': ('Bearer ' + access_token)}
         headers = {'Content-Type': 'application/json',
                    'Authorization': ('Bearer ' + PipelineConfig.deployment_config.endpoint_api_key)}
         data = {
