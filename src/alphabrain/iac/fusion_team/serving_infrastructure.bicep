@@ -36,8 +36,8 @@ resource jax_online_endpoint 'Microsoft.MachineLearningServices/workspaces/onlin
     type: 'SystemAssigned'
   }
   properties: {
-    // authMode: 'AMLToken'
-    authMode: 'Key'
+    authMode: 'AMLToken'
+    // authMode: 'Key'
     traffic: {}
   }
 }

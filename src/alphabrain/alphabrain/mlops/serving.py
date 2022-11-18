@@ -53,12 +53,12 @@ class MicroBrainInferencePipeline(IInferencePipeline):
         # The azureml-model-deployment header will force the request to go to a specific deployment.
         # Remove this header to have the request observe the endpoint traffic rules
         # , 'azureml-model-deployment': 'brain-deployment-20221104160432' }
-        # access_token = self.ml_client.online_endpoints.get_keys(
-        #     name=PipelineConfig.deployment_config.online_endpoint_name).access_token
-        # headers = {'Content-Type': 'application/json',
-        #            'Authorization': ('Bearer ' + access_token)}
+        access_token = self.ml_client.online_endpoints.get_keys(
+            name=PipelineConfig.deployment_config.online_endpoint_name).access_token
         headers = {'Content-Type': 'application/json',
-                   'Authorization': ('Bearer ' + PipelineConfig.deployment_config.endpoint_api_key)}
+                   'Authorization': ('Bearer ' + access_token)}
+        # headers = {'Content-Type': 'application/json',
+        #            'Authorization': ('Bearer ' + PipelineConfig.deployment_config.endpoint_api_key)}
         data = {
             "signature_name": "serving_default",
             "instances": [{
