@@ -12,7 +12,7 @@ Getting the initial environment up should take about 15 min. An additional 45 mi
 - For a crash course on Flax/Haiku/Jax checkout [Machine Learning Novice](https://github.com/Sruinard/machine_learning_novice)
 - For more information on why to adopt [Flax/Jax](https://github.com/Sruinard/jax_as_your_deep_learning_framework)
 - For more information on [Team Topologies](https://teamtopologies.com/)
-- For more information on [Container Apps](https://teamtopologies.com/)
+- For more information on [Container Apps](https://azure.microsoft.com/en-us/products/container-apps/#overview)
 
 ## Deploying this application to Azure
 
