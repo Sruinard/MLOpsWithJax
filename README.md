@@ -66,9 +66,7 @@ As you can see, we have two types of teams.
 1) A stream aligned team with a frontend developer (orange), an graphQL facilitator (blue), a software engineer (purple) and a ML engineer (green). 
 2) A ML Platform team with platform engineers (red).
 
-The platform team provides X-as-a-service to the stream aligned team. In our case this represents a compute cluster and a tf-serving environment for deploying Jax deep learning models.
-
-The stream aligned team consumes these artifacts and uses it to build its application.
+The platform team provides X-as-a-service to the stream aligned team. In our case this represents a compute cluster and a tf-serving environment for deploying Jax deep learning models. You can see in platform team infrastructure that we build the serving image and AzureML compute environment and that this compute cluster and serving image are consumed by the stream aligned team to run their machine learning models in production.
 
 To make life easier for you, I have setup everything with CICD-pipelines and Infrastracture as Code (IaC).
 
