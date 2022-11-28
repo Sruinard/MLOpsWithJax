@@ -1,6 +1,6 @@
 # Building innovative applications: Team Topologies, MLOps with Jax/Flax and the Enterprise Graph with GraphQL
 
-We are going to put wayyyyyyyyyy to much effort in building a sequence-to-sequence neural network that can add two digits together. As there is so much buzz in the industry about team topologies, AI/ML and GraphQL, we are going to touch on all of these topics. This repository tries to provide a practical example for you to get started with.
+As there is so much buzz in the industry about team topologies, AI/ML and GraphQL, we are going to touch on all of these topics. In particular, we are going to put wayyyyyyyyyy to much effort in building a sequence-to-sequence neural network that can add two digits together.  This repository tries to provide a practical example for you to get started with.
 In particular, I'll show you how:
 - A platform team can facilitate a Data Science team by providing standard artifacts for serving Jax/Flax models in production with TF-Serving.
 - How to expose an internal API used by the MLOps team retrain machine learning models and provide model serving.
