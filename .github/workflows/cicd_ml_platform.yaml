@@ -5,7 +5,7 @@ on:
       - main
 
 env:
-  RESOURCE_GROUP: "csu-nl-mlwithjax1"
+  RESOURCE_GROUP: "<INSERT_RESOURCE_GROUP_NAME>"
 defaults:
   run:
     working-directory: ./src/alphabrain
