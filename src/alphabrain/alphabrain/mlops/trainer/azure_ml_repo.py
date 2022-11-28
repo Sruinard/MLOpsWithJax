@@ -2,9 +2,7 @@
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml.entities import Model
-from azure.ai.ml.entities import Environment, BuildContext, ManagedOnlineDeployment
-from azure.ai.ml import command
-import os
+from azure.ai.ml.entities import ManagedOnlineDeployment
 from alphabrain.config import PipelineConfig, AzureMLConfig
 from datetime import datetime
 
@@ -13,7 +11,7 @@ class AzureMLRepo:
 
     def __init__(self, azure_ml_config: AzureMLConfig = AzureMLConfig()):
         self.ml_client: MLClient = MLClient(DefaultAzureCredential(), azure_ml_config.subscription_id,
-                                  azure_ml_config.resource_group_name, azure_ml_config.workspace_name)
+                                            azure_ml_config.resource_group_name, azure_ml_config.workspace_name)
 
     def register_model(self, path_to_model_on_storage_account, model_artifact_name='alphabrain'):
         model_version = str(datetime.now().strftime("%Y%m%d%H%M%S"))

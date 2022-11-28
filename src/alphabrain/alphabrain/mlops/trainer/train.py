@@ -21,7 +21,6 @@ import functools
 from typing import Any, Dict, Tuple
 
 from absl import app
-from absl import flags
 from absl import logging
 from clu import metric_writers
 from flax import linen as nn
@@ -37,32 +36,6 @@ from alphabrain.mlops.trainer import transform, models, serialization
 
 Array = Any
 PRNGKey = Any
-
-# flags.DEFINE_string('workdir', default='.', help='Where to store log output.')
-
-# flags.DEFINE_float(
-#     'learning_rate',
-#     default=0.003,
-#     help=('The learning rate for the Adam optimizer.'))
-
-# flags.DEFINE_integer(
-#     'batch_size', default=128, help=('Batch size for training.'))
-
-# flags.DEFINE_integer(
-#     'hidden_size', default=512, help=('Hidden size of the LSTM.'))
-
-# flags.DEFINE_integer(
-#     'num_train_steps', default=100, help=('Number of train steps.'))
-
-# flags.DEFINE_integer(
-#     'decode_frequency',
-#     default=500,
-#     help=('Frequency of decoding during training, e.g. every 1000 steps.'))
-
-# flags.DEFINE_integer(
-#     'max_len_query_digit',
-#     default=3,
-#     help=('Maximum length of a single input digit.'))
 
 
 def get_model(ctable: transform.CharacterTable, *, teacher_force: bool = False) -> models.Seq2seq:
@@ -211,11 +184,3 @@ def train_and_evaluate(serving_model_dir: str, logs_dir: str) -> train_state.Tra
         serving_dir=serving_model_dir,
         model_name=config.TrainConfig.model_name)
     return state, model_serving_path
-
-
-def main(_):
-    _ = train_and_evaluate(config.TrainConfig.workdir)
-
-
-if __name__ == '__main__':
-    app.run(main)

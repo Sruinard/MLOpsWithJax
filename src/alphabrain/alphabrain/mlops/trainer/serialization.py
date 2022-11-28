@@ -1,18 +1,9 @@
 
-import functools
-from typing import Callable, Dict, List
+from typing import Callable, Dict
 
-import absl
-
-import flax
-from flax import linen as nn
-from flax.metrics import tensorboard
-import flax.optim
 
 import jax
-from jax import numpy as jnp
 from jax.experimental import jax2tf
-from alphabrain.mlops.trainer.transform import CharacterTable
 import numpy as np
 
 from datetime import datetime
@@ -26,9 +17,6 @@ import tensorflow as tf
 _Array = np.ndarray
 _InputBatch = Dict[str,
                    _Array]  # keys are _FEATURE_KEYS_XF and values f32[B, 1]
-_LogitBatch = _Array  # of shape f32[B, 3]
-_LabelBatch = _Array  # of shape int64[B, 1]
-_Params = Dict[str, _Array]
 
 
 class _SavedModelWrapper(tf.train.Checkpoint):

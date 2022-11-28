@@ -1,17 +1,11 @@
 import os
-from pathlib import Path
 
 from alphabrain.mlops.trainer.azure_ml_repo import AzureMLRepo
 from alphabrain.mlops.trainer import train
 from alphabrain.config import PipelineConfig
 from azure.ai.ml import dsl
-from azure.ai.ml.entities import Environment, AmlCompute, BuildContext
 from mldesigner import command_component, Input, Output
 
-# environment = Environment(
-#     name="jax-training-environment",
-#     build=BuildContext(path=Path(__file__).resolve().parents[2])
-# )
 
 environment = AzureMLRepo().ml_client.environments.get(
     name=PipelineConfig.infra_config.train_env, version='2')

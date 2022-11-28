@@ -2,15 +2,13 @@
 import json
 import os
 import random
-from dataclasses import dataclass
+from typing import Optional
 
 import requests
 import strawberry
 import uvicorn
-from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from strawberry.fastapi import GraphQLRouter
 from strawberry.asgi import GraphQL
 
 from alphabrain.config import GraphAPIConfig

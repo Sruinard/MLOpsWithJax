@@ -1,9 +1,7 @@
-from typing import Any, Dict, Tuple, Generator
+from typing import Any, Dict, Tuple
 import numpy as np
 import jax
 import jax.numpy as jnp
-# from jax import random
-import random
 
 Array = Any
 

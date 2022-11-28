@@ -1,7 +1,6 @@
 # create a FastAPI application
 import os
 
-from dataclasses import dataclass
 from pydantic import BaseModel
 import uvicorn
 from fastapi import FastAPI
